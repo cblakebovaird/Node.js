@@ -1,6 +1,9 @@
 require("dotenv").config();
 
+
 var axios = require("axios");
+
+var Spotify = require('node-spotify-api');
 
 // Step 3 OMDB
 var movieName = process.argv[3];
@@ -27,29 +30,46 @@ function info (){
   } else if ( process.argv[2] === "concert-this") {
     var artist = process.argv[3];
     var bandAPI = "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp";
+    var moment = require('moment');
+      moment().format();
 
     axios.get(bandAPI).then(
     function(response) {
       for (var i = 0; i < response.data.length; i++){
         event = response.data[i];
+        name = event.venue.name;
+        date = event.datetime;
         // console.log(response.data[0]);
-          console.log("\nVenue: "+ event.venue.name + "\nLocation: " + event.venue.city + ", " + event.venue.region + "\nDate: " + event.datetime);
+          console.log("\nVenue: "+ name + "\nLocation: " + event.venue.city + ", " + event.venue.region + "\nDate: " + date);
       }
       
   }
 );
   } else if (process.argv[2] === "spotify-this-song"){
     var song = process.argv[3];
-    var spotifyAPI = 
+    // var keys = require("./keys.js")
+    var spotify = {
+      id: process.env.f8106a2bbc8c4746a9199ac73e4bcf35,
+      secret: process.env.c37e2d43ef8f46dc97eb884a61aa2f07
+    };
+    // var spotifyAPI = "https://api.spotify.com/v1/tracks/" + song;
+
+      spotify.search({ type: 'track', query: song }, function(err, data) {
+        if ( err ) {
+            console.log('Error occurred: ' + err);
+            return;  //from spotify npm docs
+        }
+        console.log(data);
+      });
+    
+    
+
+    };
+  
   }
-}
 
 
 
-
-
-var keys = require("./keys.js")
 
 info();
 
-// var spotify = new Spotify(keys.spotify);
