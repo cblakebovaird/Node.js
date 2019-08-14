@@ -1,9 +1,6 @@
 require("dotenv").config();
 
-
-var axios = require("axios");
-
-var Spotify = require('node-spotify-api');
+var axios = require('axios');
 
 // Step 3 OMDB
 var movieName = process.argv[3];
@@ -47,25 +44,29 @@ function info (){
 );
   } else if (process.argv[2] === "spotify-this-song"){
     var song = process.argv[3];
-    // var keys = require("./keys.js")
-    var spotify = {
-      id: process.env.f8106a2bbc8c4746a9199ac73e4bcf35,
-      secret: process.env.c37e2d43ef8f46dc97eb884a61aa2f07
-    };
-    // var spotifyAPI = "https://api.spotify.com/v1/tracks/" + song;
+    var Spotify = require('node-spotify-api');
+    var keys = require("./keys.js");
+
+    var spotify = new Spotify(keys.spotify);
 
       spotify.search({ type: 'track', query: song }, function(err, data) {
         if ( err ) {
             console.log('Error occurred: ' + err);
             return;  //from spotify npm docs
         }
-        console.log(data);
+        songInfo = data.tracks.items;
+        
+        for (var i = 0; i < songInfo.length; i++){
+          var album = songInfo[i].album.name;
+          var name = songInfo[i].name;
+          var url = songInfo[i].preview_url;
+          var artist = songInfo[i].artists[0].name;
+          console.log("\nSong Title: " + name + "\nArtist(s) Name: " + artist + "\nAlbum Name: " + album + "\nPreview Url: " + url + "\n--------------");
+          };
+        
+        // console.log(songInfo[0]);
       });
-    
-    
-
     };
-  
   }
 
 
