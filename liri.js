@@ -38,7 +38,7 @@ function info (){
       for (var i = 0; i < response.data.length; i++){
         event = response.data[i];
         name = event.venue.name;
-        date = event.datetime;
+        date = moment(event.datetime).format("MM/DD/YYYY");
         // console.log(response.data[0]);
           console.log("\nVenue: "+ name + "\nLocation: " + event.venue.city + ", " + event.venue.region + "\nDate: " + date + "\n-----------------");
       }
@@ -68,9 +68,22 @@ function info (){
           var artist = songInfo[i].artists[0].name;
           console.log("\nSong Title: " + name + "\nArtist(s) Name: " + artist + "\nAlbum Name: " + album + "\nPreview Url: " + url + "\n--------------");
           };
+          // console.log(songInfo[0])
       });
-    };
+    } else if(process.argv[2] === "do-what-it-says"){
+
+    var fs = require("fs");
+
+    fs.readFile("random.txt", "utf8", function(error, data){
+    if (error) {
+        console.log(error);
+    }
+    console.log(data);
+  
+    });
   }
+    }
+  
 
 info();
 
